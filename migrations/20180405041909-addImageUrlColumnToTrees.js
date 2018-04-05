@@ -15,11 +15,14 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return null;
+  db.addColumn("trees", "image_url",{
+		type: "string"
+  },
+  null)
 };
 
 exports.down = function(db) {
-  return null;
+  db.removeColumn("trees", "image_url", null)
 };
 
 exports._meta = {
