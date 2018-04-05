@@ -1,0 +1,14 @@
+{
+  "name": "treetracker-database-migrations",
+  "version": "1.0.0",
+  "description": "Database migrations for treetracker web database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+	"db-migrate" : "^0.10.7"
+  }
+}
