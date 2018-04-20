@@ -14,15 +14,16 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function (db, callback) {
-  db.createTable('organizations', {
+exports.up = function(db, callback) {
+  db.createTable('trees_certificates', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    name: 'string'  // shorthand notation
+    tree_id: 'int',  // shorthand notation
+    certiciate_id: 'int'
   }, callback);
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('organizations', callback);
+  db.dropTable('trees_certificates', callback);
 };
 
 exports._meta = {
