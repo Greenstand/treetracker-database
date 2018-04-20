@@ -15,14 +15,14 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  db.addColumn("trees", "image_url",{
-		type: "string"
-  },
-  null)
+  db.createTable('organizations', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
+    name: 'string'  // shorthand notation
+  }, null);
 };
 
 exports.down = function(db) {
-  db.removeColumn("trees", "image_url", null)
+  return null;
 };
 
 exports._meta = {
