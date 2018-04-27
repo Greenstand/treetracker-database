@@ -14,15 +14,19 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function (db, callback) {
-  db.createTable('organizations', {
+exports.up = function(db, callback) {
+  db.createTable('donors', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    name: 'string'  // shorthand notation
+    organization_id: 'integer',
+    first_name: 'string',  // shorthand notation
+    last_name: 'string',  // shorthand notation
+    email: 'string',  // shorthand notation
   }, callback);
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('organizations', callback);
+  db.dropTable('donors', 
+   callback);
 };
 
 exports._meta = {

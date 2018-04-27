@@ -14,15 +14,12 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function (db, callback) {
-  db.createTable('organizations', {
-    id: { type: 'int', primaryKey: true, autoIncrement: true },
-    name: 'string'  // shorthand notation
-  }, callback);
+exports.up = function(db, callback) {
+  db.runSql('create index trees_estimated_geometric_location_index_btree on trees using btree(estimated_geometric_location)', callback);
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('organizations', callback);
+  db.runSql('drop index trees_estimated_geometric_location_index_btree', callback);
 };
 
 exports._meta = {
