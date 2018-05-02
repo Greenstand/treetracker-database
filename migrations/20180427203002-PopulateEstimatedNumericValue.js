@@ -16,7 +16,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db, callback) {
 
-  db.runSql("UPDATE trees set lat = to_number(locations.lat,'999D999999'), lon = to_number(locations.lon,'999D999999') from locations where locations.id = trees.primary_location_id");
+  db.runSql("UPDATE trees set lat = to_number(locations.lat,'999D999999'), lon = to_number(locations.lon,'999D999999'), gps_accuracy = locations.gps_accuracy from locations where locations.id = trees.primary_location_id");
   db.runSql("UPDATE trees SET estimated_geometric_location = ST_GeomFromText('POINT(' || lat || ' ' || lon || ')', 4326)");
   callback();
 

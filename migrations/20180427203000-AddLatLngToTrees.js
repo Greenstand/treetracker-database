@@ -14,20 +14,27 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function (db) {
+exports.up = function (db, callback) {
   db.addColumn('trees',
                'lat',
                { type: 'decimal' });
-  return db.addColumn('trees',
+  db.addColumn('trees',
                'lon',
                { type: 'decimal' });
+  db.addColumn('trees',
+               'gps_accuracy',
+               { type: 'int' });
+  callback(); 
 };
 
-exports.down = function (db) {
+exports.down = function (db, callback) {
   db.removeColumn('trees', 
                   'lat');
-  return db.removeColumn('trees',
+  db.removeColumn('trees',
                   'lon');
+  db.removeColumn('trees',
+                  'gps_accuracy');
+  callback();
 };
 
 exports._meta = {
