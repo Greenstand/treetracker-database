@@ -1,3 +1,5 @@
+rm treetracker.mysql
+rm treetracker.pgsql
 echo 'drop database treetracker_migrate' | mysql -u root 
 echo 'create database treetracker_migrate' | mysql -u root
 ssh jezra@treetracker.org source mysql.dump.treetracker.sh
