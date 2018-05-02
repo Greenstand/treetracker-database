@@ -17,7 +17,7 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db, callback) {
   db.createTable('donors', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    organization_id: 'integer',
+    organization_id: 'int',
     first_name: 'string',  // shorthand notation
     last_name: 'string',  // shorthand notation
     email: 'string',  // shorthand notation

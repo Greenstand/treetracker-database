@@ -14,16 +14,15 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
+exports.up = function(db, callback) {
   db.addColumn("trees", "image_url",{
 		type: "string"
   },
-  ifNotExists: true,
-  null)
+  callback)
 };
 
-exports.down = function(db) {
-  db.removeColumn("trees", "image_url", null)
+exports.down = function(db, callback) {
+  db.removeColumn("trees", "image_url", callback)
 };
 
 exports._meta = {
