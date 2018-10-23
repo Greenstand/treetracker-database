@@ -17,7 +17,8 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.createTable('clusters', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    count: 'int'
+    count: 'int',
+    zoom_level: 'int'
   });
 };
 
