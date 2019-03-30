@@ -15,7 +15,9 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.addColumn('trees', 'verified', 'boolean');
+  return db.addColumn('trees', 'verified',
+    { type: 'boolean', defaultValue: false, notNull: true} 
+  );
 };
 
 exports.down = function(db) {
