@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.runSql("SELECT AddGeometryColumn ('public','region','geom',4326,'POLYGON',2)", callback);
+  db.runSql("SELECT AddGeometryColumn ('public','region','geom',4326,'MULTIPOLYGON',2)", callback);
 };
 
 exports.down = function(db, callback) {
