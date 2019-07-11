@@ -69,3 +69,30 @@ ST_DUMP(
 )
 JOIN region_type
 ON region_type.type = 'grid-10000m';
+
+
+
+
+
+INSERT INTO region_type
+(type)
+values
+('grid-5000m');
+
+-- try just africa and europe
+INSERT INTO region
+(geom, type_id)
+SELECT ST_Multi(geom), region_type.id
+FROM
+ST_DUMP(
+  makegrid_2d(
+    ST_GeomFromText(
+      'Polygon((16 -38,16 -38,61 70,61 70,16 -38))',
+      4326
+    ),
+     5000, -- width step in meters
+     5000  -- height step in meters
+  )
+)
+JOIN region_type
+ON region_type.type = 'grid-5000m';
