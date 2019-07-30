@@ -15,7 +15,9 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.runSql(`SELECT tree_region.id,
+  return db.runSql(`
+    CREATE MATERIALIZED VIEW active_tree_region AS
+    SELECT tree_region.id,
     region.id AS region_id,
     region.centroid,
     region.type_id,
