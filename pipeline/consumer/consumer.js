@@ -1,16 +1,26 @@
 const fs = require("fs");
 
 const { Consumer } = require('sqs-consumer');
-const Region = 'eu-central-1';
-const QueueUrl = 'https://sqs.eu-central-1.amazonaws.com/053061259712/treetracker-test-queue';
+var aws = require('aws-sdk');
+aws.config.update({
+    s3ForcePathStyle: true,
+    // FIXME make this work based on the config
+    endpoint: 'http://localhost:4572'
+});
+var config = require('./config/config')
+const s3 = new aws.S3();
 
-const config = require('./config/config');
+const Region = config.region;
+const QueueUrl = config.queueUrl;
+
 const { Pool, Client } = require('pg');
 const pool = new Pool({ connectionString: config.connectionString });
 
 //const Sentry = require('@sentry/node');
 //Sentry.init({ dsn: config.sentryDSN });
 
+console.log(Region)
+console.log(QueueUrl)
 const app = Consumer.create({
     queueUrl: QueueUrl,
     region: Region,
@@ -25,16 +35,20 @@ const app = Consumer.create({
         */
 
     var body = JSON.parse(message.Body);
-    //console.log(body);
+    console.log(body);
     var records = body['Records'];
-    console.log(records);
+    //console.log(records);
 
     for(let record of records) {
       //console.log(record);
       var fullRecord = JSON.stringify(record);
+      console.log(fullRecord);
       var eventTime = record['eventTime'];
       var bucketArn = record['s3']['bucket']['arn'];
+      var bucketName = record['s3']['bucket']['name'];
       var key = record['s3']['object']['key'];
+
+      fetchAndSaveS3Data(key, bucketName);
 
       // TODO put this into a table with the above pieces                                          
 
@@ -59,6 +73,22 @@ app.on('error', function (err) {
 app.on('processing_error', function (err) {
     console.log('processing_error', err);
 });
+
+function fetchAndSaveS3Data(key, bucket) {
+    params = {
+        Bucket: bucket,
+        Key: key
+    };
+    s3.getObject(params, function(err, data){
+        if(err){
+            console.log("error");
+            console.log(err);
+        } else {
+            let objectData = JSON.parse(data.Body.toString('utf-8'));
+            console.log(objectData);
+        }
+    });
+}
 
 
 app.start()
