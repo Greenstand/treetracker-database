@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "db-migrate": "^0.10.7",
-    "db-migrate-pg": "^0.4.0"
+    "db-migrate-pg": "^0.4.0",
+    "sqs-consumer": "^5.3.0"
   }
 }

@@ -1,0 +1,11 @@
+{
+    "QueueConfigurations": [
+        {
+            "QueueArn": "arn:aws:sqs:elasticmq:000000000000:greenstand-queue",
+            "Events": [
+                "s3:ObjectCreated:*"
+            ]
+        }
+    ]
+}
+

@@ -1,0 +1,27 @@
+docker pull localstack/localstack
+
+lockstack-docker.sh - Sets up a local S3 and SQS instance.
+postgres-docker.sh - Sets up a local postgres DB with username/password of docker.
+
+# source the localstack source to use the cli
+source localstack/source-localstack.sh
+
+# run setup.sh once the docker containers are running
+./localstack/setup.sh
+
+# to run tests, run the consumer
+node consumer/consumer.js
+
+# and push a file to s3
+./s3api.copy.sh
+
+
+# Some useful commands
+
+# Use this to get the ARN for the notifications file
+aws --endpoint-url=http://localhost:4576 sqs get-queue-attributes --queue-url http://localhost:4576/queue/greenstand-queue --attribute-names All
+
+aws --endpoint-url=http://localhost:4572 s3api put-bucket-notification-configuration --bucket greenstand-bucket --notification-configuration file://notifications.queue.json
+
+# add the sample file
+aws --endpoint-url=http://localhost:4572 s3 cp sample-message s3://greenstand-bucket
