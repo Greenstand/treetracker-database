@@ -30,6 +30,11 @@ const app = Consumer.create({
 
       var body = JSON.parse(message.Body);
       console.log(body);
+      if(body.Event == 's3:TestEvent'){
+        console.log('Test Event');
+        return;
+      }
+
       var records = body['Records'];
       //console.log(records);
 
