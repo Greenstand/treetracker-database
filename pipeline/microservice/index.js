@@ -43,13 +43,13 @@ app.use(function onError(err, req, res, next) {
 
 app.set('view engine','html');
 
-app.post('/planters/registration', async (req, res) => {
+app.post('/planter', async (req, res) => {
   const user = await data.findOrCreateUser(req.body.planter_identifier, req.body.first_name, req.body.last_name, req.body.organization);
   await data.createPlanterRegistration(user.id, req.deviceId, req.body);
   res.status(200).json({});
 });
 
-app.post('/trees/create', async (req, res) => {
+app.post('/tree', async (req, res) => {
     const user = await data.findUser(req.body.planter_identifier);
     var duplicate = null;
     if(req.body.uuid !== null 
