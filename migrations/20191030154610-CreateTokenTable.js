@@ -5,9 +5,9 @@ var type;
 var seed;
 
 /**
-  * We receive the dbmigrate dependency from dbmigrate initially.
-  * This enables us to not have to rely on NODE_PATH.
-  */
+ * We receive the dbmigrate dependency from dbmigrate initially.
+ * This enables us to not have to rely on NODE_PATH.
+ */
 exports.setup = function(options, seedLink) {
   dbm = options.dbmigrate;
   type = dbm.dataType;
@@ -18,7 +18,7 @@ exports.up = function(db) {
   return db.createTable('token', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
     token_id: 'int',
-    entity_id: 'int',
+    entity_id: 'int'
   });
 };
 
