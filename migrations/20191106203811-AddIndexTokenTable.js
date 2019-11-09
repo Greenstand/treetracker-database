@@ -19,12 +19,8 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db, callback) {
   async.series(
     [
-      db.addForeignKey.bind(db, 'token', 'trees', 'token_tree_id_fk', {
-        tree_id: 'id'
-      }),
-      db.addForeignKey.bind(db, 'token', 'entity', 'token_entity_id_fk', {
-        entity_id: 'id'
-      })
+      db.addIndex.bind(db, 'token', 'token_trees_id_idx', ['tree_id']),
+      db.addIndex.bind(db, 'token', 'token_entity_id_idx', ['entity_id'])
     ],
     callback
   );
@@ -33,12 +29,8 @@ exports.up = function(db, callback) {
 exports.down = function(db, callback) {
   async.series(
     [
-      db.addForeignKey.bind(db, 'token', 'trees', 'token_tree_id_fk', {
-        tree_id: 'id'
-      }),
-      db.addForeignKey.bind(db, 'token', 'entity', 'token_entity_id_fk', {
-        entity_id: 'id'
-      })
+      db.addIndex.bind(db, 'token', 'token_trees_id_idx', ['tree_id']),
+      db.addIndex.bind(db, 'token', 'token_entity_id_idx', ['entity_id'])
     ],
     callback
   );
