@@ -1,5 +1,7 @@
 'use strict';
 
+var async = require('async');
+
 var dbm;
 var type;
 var seed;
@@ -15,35 +17,45 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.addForeignKey(
-    'payment',
-    'entity',
-    'payment_entity_sender_id_fk',
-    { entity_sender_id: 'id' },
-    callback
-  );
-  db.addForeignKey(
-    'payment',
-    'entity',
-    'payment_entity_receiver_id_fk',
-    { entity_receiver_id: 'id' },
+  async.series(
+    [
+      db.addForeignKey.bind(
+        db,
+        'payment',
+        'entity',
+        'payment_entity_sender_id_fk',
+        { entity_sender_id: 'id' }
+      ),
+      db.addForeignKey.bind(
+        db,
+        'payment',
+        'entity',
+        'payment_entity_receiver_id_fk',
+        { entity_receiver_id: 'id' }
+      )
+    ],
     callback
   );
 };
 
 exports.down = function(db, callback) {
-  db.removeForeignKey(
-    'payment',
-    'entity',
-    'payment_entity_sender_id_fk',
-    { entity_sender_id: 'id' },
-    callback
-  );
-  db.removeForeignKey(
-    'payment',
-    'entity',
-    'payment_entity_receiver_id_fk',
-    { entity_receiver_id: 'id' },
+  async.series(
+    [
+      db.removeForeignKey.bind(
+        db,
+        'payment',
+        'entity',
+        'payment_entity_sender_id_fk',
+        { entity_sender_id: 'id' }
+      ),
+      db.removeForeignKey.bind(
+        db,
+        'payment',
+        'entity',
+        'payment_entity_receiver_id_fk',
+        { entity_receiver_id: 'id' }
+      )
+    ],
     callback
   );
 };

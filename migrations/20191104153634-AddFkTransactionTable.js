@@ -1,5 +1,7 @@
 'use strict';
 
+var async = require('async');
+
 var dbm;
 var type;
 var seed;
@@ -15,49 +17,59 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.addForeignKey(
-    'transaction',
-    'entity',
-    'transaction_entity_sender_id_fk',
-    { entity_sender_id: 'id' },
-    callback
-  );
-  db.addForeignKey(
-    'transaction',
-    'entity',
-    'transaction_entity_receiver_id_fk',
-    { entity_receiver_id: 'id' },
-    callback
-  );
-  db.addForeignKey(
-    'transaction',
-    'token',
-    'transaction_token_id_fk',
-    { token_id: 'id' },
+  async.series(
+    [
+      db.addForeignKey.bind(
+        db,
+        'transaction',
+        'entity',
+        'transaction_entity_sender_id_fk',
+        { entity_sender_id: 'id' }
+      ),
+      db.addForeignKey.bind(
+        db,
+        'transaction',
+        'entity',
+        'transaction_entity_receiver_id_fk',
+        { entity_receiver_id: 'id' }
+      ),
+      db.addForeignKey.bind(
+        db,
+        'transaction',
+        'token',
+        'transaction_token_id_fk',
+        { token_id: 'id' }
+      )
+    ],
     callback
   );
 };
 
 exports.down = function(db, callback) {
-  db.removeForeignKey(
-    'transaction',
-    'entity',
-    'transaction_entity_sender_id_fk',
-    { entity_sender_id: 'id' },
-    callback
-  );
-  db.removeForeignKey(
-    'transaction',
-    'entity',
-    'transaction_entity_receiver_id_fk',
-    { entity_receiver_id: 'id' },
-    callback
-  );
-  db.removeForeignKey(
-    'transaction',
-    'token',
-    'transaction_token_id_fk',
-    { token_id: 'id' },
+  async.series(
+    [
+      db.addForeignKey.bind(
+        db,
+        'transaction',
+        'entity',
+        'transaction_entity_sender_id_fk',
+        { entity_sender_id: 'id' }
+      ),
+      db.addForeignKey.bind(
+        db,
+        'transaction',
+        'entity',
+        'transaction_entity_receiver_id_fk',
+        { entity_receiver_id: 'id' }
+      ),
+      db.addForeignKey.bind(
+        db,
+        'transaction',
+        'token',
+        'transaction_token_id_fk',
+        { token_id: 'id' }
+      )
+    ],
     callback
   );
 };

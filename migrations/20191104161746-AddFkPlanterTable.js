@@ -1,5 +1,7 @@
 'use strict';
 
+var async = require('async');
+
 var dbm;
 var type;
 var seed;
@@ -15,35 +17,37 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.addForeignKey(
-    'planter',
-    'entity',
-    'planter_person_id_fk',
-    { person_id: 'id' },
-    callback
-  );
-  db.addForeignKey(
-    'planter',
-    'entity',
-    'planter_organization_id_fk',
-    { organization_id: 'id' },
+  async.series(
+    [
+      db.addForeignKey.bind(db, 'planter', 'entity', 'planter_person_id_fk', {
+        person_id: 'id'
+      }),
+      db.addForeignKey.bind(
+        db,
+        'planter',
+        'entity',
+        'planter_organization_id_fk',
+        { organization_id: 'id' }
+      )
+    ],
     callback
   );
 };
 
 exports.down = function(db, callback) {
-  db.removeForeignKey(
-    'planter',
-    'entity',
-    'planter_person_id_fk',
-    { person_id: 'id' },
-    callback
-  );
-  db.removeForeignKey(
-    'planter',
-    'entity',
-    'planter_organization_id_fk',
-    { organization_id: 'id' },
+  async.series(
+    [
+      db.addForeignKey.bind(db, 'planter', 'entity', 'planter_person_id_fk', {
+        person_id: 'id'
+      }),
+      db.addForeignKey.bind(
+        db,
+        'planter',
+        'entity',
+        'planter_organization_id_fk',
+        { organization_id: 'id' }
+      )
+    ],
     callback
   );
 };
