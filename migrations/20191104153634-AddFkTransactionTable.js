@@ -24,14 +24,14 @@ exports.up = function(db, callback) {
         'transaction',
         'entity',
         'transaction_entity_sender_id_fk',
-        { entity_sender_id: 'id' }
+        { sender_entity_id: 'id' }
       ),
       db.addForeignKey.bind(
         db,
         'transaction',
         'entity',
         'transaction_entity_receiver_id_fk',
-        { entity_receiver_id: 'id' }
+        { receiver_entity_id: 'id' }
       ),
       db.addForeignKey.bind(
         db,
@@ -53,14 +53,14 @@ exports.down = function(db, callback) {
         'transaction',
         'entity',
         'transaction_entity_sender_id_fk',
-        { entity_sender_id: 'id' }
+        { sender_entity_id: 'id' }
       ),
       db.addForeignKey.bind(
         db,
         'transaction',
         'entity',
         'transaction_entity_receiver_id_fk',
-        { entity_receiver_id: 'id' }
+        { receiver_entity_id: 'id' }
       ),
       db.addForeignKey.bind(
         db,

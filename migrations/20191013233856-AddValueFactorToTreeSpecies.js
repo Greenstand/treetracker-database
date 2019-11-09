@@ -19,7 +19,7 @@ exports.up = function(db) {
 }
 
 exports.down = function(db) {
-  return db.removeColum('tree_species', 'value_factor');
+  return db.removeColumn('tree_species', 'value_factor');
 };
 
 exports._meta = {
