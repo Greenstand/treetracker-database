@@ -19,11 +19,11 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db, callback) {
   async.series(
     [
-      db.addIndex.bind(db, 'payment', 'payment_entity_sender_id_idx', [
-        'entity_sender_id'
+      db.addIndex.bind(db, 'payment', 'payment_sender_entity_id_idx', [
+        'sender_entity_id'
       ]),
-      db.addIndex.bind(db, 'payment', 'payment_entity_receiver_id_idx', [
-        'entity_receiver_id'
+      db.addIndex.bind(db, 'payment', 'payment_receiver_entity_id_idx', [
+        'receiver_entity_id'
       ])
     ],
     callback
@@ -33,11 +33,11 @@ exports.up = function(db, callback) {
 exports.down = function(db, callback) {
   async.series(
     [
-      db.addIndex.bind(db, 'payment', 'payment_entity_sender_id_idx', [
-        'entity_sender_id'
+      db.addIndex.bind(db, 'payment', 'payment_sender_entity_id_idx', [
+        'sender_entity_id'
       ]),
-      db.addIndex.bind(db, 'payment', 'payment_entity_receiver_id_idx', [
-        'entity_receiver_id'
+      db.addIndex.bind(db, 'payment', 'payment_receiver_entity_id_idx', [
+        'receiver_entity_id'
       ])
     ],
     callback

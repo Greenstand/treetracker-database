@@ -16,7 +16,7 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
+exports.up = function(db, callback) {
   async.series(
     [
       db.renameColumn.bind(db, 'pending_update', 'user_id', 'planter_id'),
@@ -27,7 +27,7 @@ exports.up = function(db) {
   );
 };
 
-exports.down = function(db) {
+exports.down = function(db, callback) {
   async.series(
     [
       db.renameColumn.bind(db, 'pending_update', 'planter_id', 'user_id'),

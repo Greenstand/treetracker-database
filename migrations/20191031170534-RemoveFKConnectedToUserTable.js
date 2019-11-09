@@ -17,33 +17,46 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
+
   async.series(
     [
   db.removeForeignKey.bind(
     db, 
     'trees',
-    'trees_user_id_fkey',
-    { dropIndex: true }),
+    'trees_user_id_fkey'
+    ),
   db.removeForeignKey.bind(
     db,
     'pending_update',
-    'pending_update_user_id_fkey',
-    { dropIndex: true }),
+    'pending_update_user_id_fkey'
+    ),
   db.removeForeignKey.bind(
     db,
     'locations',
-    'locations_user_id_fkey',
-    { dropIndex: true }
+    'locations_user_id_fkey'
   ),
   db.removeForeignKey.bind(
     db,
     'notes',
-    'notes_user_id_fkey',
-    { dropIndex: true }
+    'notes_user_id_fkey'
   )], callback);
 }; 
 
 exports.down = function(db, callback) {
+
+/*
+  db.addForeignKey(
+    'trees',
+    'users',
+    'trees_user_id_fkey',
+    {
+	'user_id' : 'id'
+    },
+    callback
+    );
+*/
+
+/*
   async.series(
     [
   db.removeForeignKey.bind(
@@ -68,6 +81,7 @@ exports.down = function(db, callback) {
     'notes_user_id_fkey',
     { dropIndex: true }
   )], callback);
+*/
 }; 
 
 exports._meta = {
