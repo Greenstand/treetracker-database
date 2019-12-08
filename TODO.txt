@@ -1,0 +1,4 @@
+treetracker=> create unique index on token(tree_id);
+CREATE INDEX
+treetracker=> create unique index on token(uuid);
+CREATE INDEX
