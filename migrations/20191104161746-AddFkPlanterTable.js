@@ -37,10 +37,10 @@ exports.up = function(db, callback) {
 exports.down = function(db, callback) {
   async.series(
     [
-      db.addForeignKey.bind(db, 'planter', 'entity', 'planter_person_id_fk', {
+      db.removeForeignKey.bind(db, 'planter', 'entity', 'planter_person_id_fk', {
         person_id: 'id'
       }),
-      db.addForeignKey.bind(
+      db.removeForeignKey.bind(
         db,
         'planter',
         'entity',

@@ -48,21 +48,21 @@ exports.up = function(db, callback) {
 exports.down = function(db, callback) {
   async.series(
     [
-      db.addForeignKey.bind(
+      db.removeForeignKey.bind(
         db,
         'transaction',
         'entity',
         'transaction_entity_sender_id_fk',
         { sender_entity_id: 'id' }
       ),
-      db.addForeignKey.bind(
+      db.removeForeignKey.bind(
         db,
         'transaction',
         'entity',
         'transaction_entity_receiver_id_fk',
         { receiver_entity_id: 'id' }
       ),
-      db.addForeignKey.bind(
+      db.removeForeignKey.bind(
         db,
         'transaction',
         'token',
