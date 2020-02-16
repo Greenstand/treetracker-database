@@ -1,8 +1,10 @@
 CREATE TEMPORARY TABLE new_region_data AS (SELECT * FROM import.{table_name});
 ALTER TABLE new_region_data DROP COLUMN geom;
 
-
+DELETE from region_zoom WHERE region_id IN ( SELECT id FROM region WHERE type_id IN ( SELECT id FROM region_type WHERE type = '{region_type}' ) );
+DELETE from region WHERE type_id IN ( SELECT id FROM region_type WHERE type = '{region_type}' );
 DELETE FROM region_type WHERE type = '{region_type}';
+
 INSERT INTO region_type
 (type)
 VALUES
@@ -26,7 +28,7 @@ ON region_type.type = '{region_type}';
 INSERT INTO region_zoom
 (region_id, zoom_level, priority)
 SELECT region.id, zoom_level, 2
-FROM unnest(ARRAY[1,2,3,4,5]) zoom_level
+FROM unnest(ARRAY[{zoom_levels}]) zoom_level
 JOIN region
 ON TRUE
 JOIN region_type
@@ -50,3 +52,5 @@ JOIN region_zoom
 ON region_zoom.region_id = region.id
 WHERE trees.active = true
 ORDER BY trees.id, zoom_level, region_zoom.priority DESC;
+
+REFRESH MATERIALIZED VIEW active_tree_region;

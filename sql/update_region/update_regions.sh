@@ -25,6 +25,9 @@ cat prepared_import.pgsql | psql postgres://treetracker@localhost/treetracker
 
 cp load_regions.sql prepared_load_regions.sql
 
+
+# TODO: we are no currently removing regions and zooms before inserting new ones
+
 [[ $SQLFILE =~ (.*).pgsql ]]
 TABLENAME=${BASH_REMATCH[1]}
 sed -i "s/{table_name}/$TABLENAME/g" prepared_load_regions.sql
@@ -32,3 +35,10 @@ sed -i "s/{table_name}/$TABLENAME/g" prepared_load_regions.sql
 echo "Region type to replace: "
 read REGION_TYPE
 sed -i "s/{region_type}/$REGION_TYPE/g" prepared_load_regions.sql
+
+echo "Zoom levels to match: "
+read ZOOM_LEVELS
+sed -i "s/{zoom_levels}/$ZOOM_LEVELS/g" prepared_load_regions.sql
+
+
+cat prepared_load_regions.pgsql | psql postgres://treetracker@localhost/treetracker
