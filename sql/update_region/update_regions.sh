@@ -26,7 +26,7 @@ cat prepared_import.pgsql | psql postgres://treetracker@localhost/treetracker
 cp components/load_regions.pgsql prepared_load_regions.pgsql
 
 
-# TODO: we are no currently removing regions and zooms before inserting new ones
+# TODO: we are not currently removing regions and zooms before inserting new ones
 
 [[ $SQLFILE =~ (.*).pgsql ]]
 TABLENAME=${BASH_REMATCH[1]}
