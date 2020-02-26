@@ -61,6 +61,7 @@ app.post('/tree', async (req, res) => {
       res.status(200).json({ duplicate });
     } else {
       const tree = await data.createTree( user.id, req.deviceId, req.body);
+      console.log("created tree " + tree.uuid);
       res.status(201).json({ tree });
     }
 });
