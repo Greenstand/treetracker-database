@@ -1,0 +1,16 @@
+{
+  "name": "consumer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "consumer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.627.0",
+    "pg": "^7.18.2",
+    "sqs-consumer": "^5.4.0"
+  }
+}
