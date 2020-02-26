@@ -42,20 +42,42 @@ const pool = new Pool({
       
       }
 
-      const result = await Promise.all(requests);
-      console.log(result);
-
-      const update = {
-        text: `UPDATE bulk_tree_upload
-        SET processed = TRUE,
-        processed_at = now()
-        WHERE id = $1`,
-        values: [row.id]
-      };
-      const rvalUpdate = await pool.query(update);
-      console.log(`Processed bulk tree upload ${row.id}`);
-
     }
+
+    if(bulkData.registrations != null){
+
+      for(let planter of bulkData.registrations){
+        console.log(tree);
+
+        var options = {
+          method: 'POST',
+          uri: Config.dataInputMicroserviceURI + "planter",
+          body: tree,
+          json: true // Automatically stringifies the body to JSON
+        };
+
+        //const result = await rp(options);
+        const promise = rp(options);
+        requests.push(promise);
+      
+      }
+    }
+
+
+    const result = await Promise.all(requests);
+    console.log(result);
+
+    const update = {
+      text: `UPDATE bulk_tree_upload
+      SET processed = TRUE,
+      processed_at = now()
+      WHERE id = $1`,
+      values: [row.id]
+    };
+    const rvalUpdate = await pool.query(update);
+    console.log(`Processed bulk tree upload ${row.id}`);
+
+
   }
 
   pool.end();
