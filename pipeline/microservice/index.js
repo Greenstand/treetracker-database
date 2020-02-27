@@ -46,6 +46,7 @@ app.set('view engine','html');
 app.post('/planter', async (req, res) => {
   const user = await data.findOrCreateUser(req.body.planter_identifier, req.body.first_name, req.body.last_name, req.body.organization);
   await data.createPlanterRegistration(user.id, req.deviceId, req.body);
+  console.log("processed planter" + user.id);
   res.status(200).json({});
 });
 
