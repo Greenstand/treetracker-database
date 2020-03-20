@@ -40,7 +40,7 @@ SET centroid = ST_Centroid(geom)
 WHERE centroid IS NULL;
 
 
-DELETE FROM tree_region;
+DELETE FROM tree_region where zoom_level IN ({zoom_levels});
 
 INSERT INTO tree_region
 (tree_id, zoom_level, region_id)
@@ -51,6 +51,7 @@ ON ST_Contains( region.geom, trees.estimated_geometric_location)
 JOIN region_zoom
 ON region_zoom.region_id = region.id
 WHERE trees.active = true
+AND region_zoom.zoom_level IN ({zoom_levels})
 ORDER BY trees.id, zoom_level, region_zoom.priority DESC;
 
 REFRESH MATERIALIZED VIEW active_tree_region;
