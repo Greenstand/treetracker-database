@@ -23,10 +23,13 @@ echo $SQLFILE
 [[ $SQLFILE =~ (.*).pgsql ]]
 TABLENAME=${BASH_REMATCH[1]}
 
-echo 'DROP TABLE import'.$TABLENAME';' | psql postgres://treetracker@localhost/treetracker
+echo "Database connection string: "
+read DATABASE_CONNECTION
+
+echo 'DROP TABLE import'.$TABLENAME';' | psql $DATABASE_CONNECTION
 
 echo 'SET search_path TO import, postgis, public; show search_path;' | cat - $SQLFILE > prepared_import.pgsql
-cat prepared_import.pgsql | psql postgres://treetracker@localhost/treetracker
+cat prepared_import.pgsql | psql $DATABASE_CONNECTION
 
 cp components/load_regions.pgsql prepared_load_regions.pgsql
 
@@ -41,4 +44,4 @@ read ZOOM_LEVELS
 sed -i "s/{zoom_levels}/$ZOOM_LEVELS/g" prepared_load_regions.pgsql
 
 
-cat prepared_load_regions.pgsql | psql postgres://treetracker@localhost/treetracker
+cat prepared_load_regions.pgsql | psql $DATABASE_CONNECTION
