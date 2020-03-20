@@ -3,7 +3,7 @@
 rm *.pgsql
 rm *.tar.gz
 
-echo "URL for shapefile archive: "
+echo "URL for archived pgsql shapefile export: "
 read SHAPEFILE_URL
 
 wget $SHAPEFILE_URL
@@ -20,16 +20,16 @@ SQLFILE=${BASH_REMATCH[1]}
 
 echo $SQLFILE
 
+[[ $SQLFILE =~ (.*).pgsql ]]
+TABLENAME=${BASH_REMATCH[1]}
+
+echo 'DROP TABLE import'.$TABLENAME';' | psql postgres://treetracker@localhost/treetracker
+
 echo 'SET search_path TO import, postgis, public; show search_path;' | cat - $SQLFILE > prepared_import.pgsql
 cat prepared_import.pgsql | psql postgres://treetracker@localhost/treetracker
 
 cp components/load_regions.pgsql prepared_load_regions.pgsql
 
-
-# TODO: we are no currently removing regions and zooms before inserting new ones
-
-[[ $SQLFILE =~ (.*).pgsql ]]
-TABLENAME=${BASH_REMATCH[1]}
 sed -i "s/{table_name}/$TABLENAME/g" prepared_load_regions.pgsql
 
 echo "Region type to replace: "
