@@ -2,6 +2,7 @@ const config = require('./config/config')
 
 const { Consumer } = require('sqs-consumer');
 var aws = require('aws-sdk');
+aws.config.loadFromPath('./config/aws.json');
 aws.config.update({
     // s3ForcePathStyle: true,
     // FIXME make this work based on the config

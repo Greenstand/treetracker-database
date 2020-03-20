@@ -24,7 +24,7 @@ class Data {
     }
   }
 
-  async createTree(userId, deviceId, body) {
+  async createTree(planterId, deviceId, body) {
     let lat = body.lat;
     let lon = body.lon;
     let gpsAccuracy = body.gps_accuracy;
@@ -32,14 +32,13 @@ class Data {
     let imageUrl = body.image_url; // first image
     let planterPhotoUrl = body.planter_photo_url;
     let planterIdentifier = body.planter_identifier;
-    let sequenceId = body.sequence_id;
     let note = body.note ? body.note : "";
     let uuid = body.uuid; // This is required
 
     const geometry = 'POINT( ' + lon + ' ' + lat + ')';
     const insertQuery = {
       text: `INSERT INTO
-      trees(user_id,
+      trees(planter_id,
         lat,
         lon,
         gps_accuracy,
@@ -49,13 +48,12 @@ class Data {
         estimated_geometric_location,
         planter_photo_url,
         planter_identifier,
-        sequence,
         device_id,
         note,
         uuid
       )
-      VALUES($1, $2, $3, $4, to_timestamp($5), to_timestamp($5), $6, ST_PointFromText($7, 4326), $8, $9, $10, $11, $12, $13 ) RETURNING *`,
-      values: [userId, lat, lon, gpsAccuracy, timestamp, imageUrl, geometry, planterPhotoUrl, planterIdentifier, sequenceId, deviceId, note, uuid],
+      VALUES($1, $2, $3, $4, to_timestamp($5), to_timestamp($5), $6, ST_PointFromText($7, 4326), $8, $9, $10, $11, $12 ) RETURNING *`,
+      values: [planterId, lat, lon, gpsAccuracy, timestamp, imageUrl, geometry, planterPhotoUrl, planterIdentifier, deviceId, note, uuid],
     }
 
     const rval = await this.pool.query(insertQuery)
@@ -100,24 +98,24 @@ class Data {
     return rval.rows;
   }
 
-  async treesForUser(userId){
+  async treesForUser(planterId){
 
     let query = {
       text: `SELECT *
       FROM trees
-      WHERE user_id = $1
+      WHERE planter_id = $1
       AND active = true`,
-      values: [userId]
+      values: [planterId]
     }
     const rval = await this.pool.query(query);
     return rval.rows;
 
   }
 
-  async createPlanterRegistration(userId, deviceId, body){
+  async createPlanterRegistration(planterId, deviceId, body){
     var query = {
-      text: 'INSERT INTO planter_registrations ( user_id, device_id, first_name, last_name, organization, location_string ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      values: [userId, deviceId, body.first_name, body.last_name, body.organization, body.location_string]
+      text: 'INSERT INTO planter_registrations ( planter_id, device_id, first_name, last_name, organization, location_string ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      values: [planterId, deviceId, body.first_name, body.last_name, body.organization, body.location_string]
      }
     const rval = await this.pool.query(query);
     return rval.rows[0];
@@ -129,7 +127,7 @@ class Data {
 
   async findOrCreateUser(identifier, first_name, last_name, organization){
       let query = {
-      text: 'SELECT * FROM users WHERE phone = $1 OR email = $1',
+      text: 'SELECT * FROM planter WHERE phone = $1 OR email = $1',
       values: [identifier]
       }
       const data = await this.pool.query(query);
@@ -138,12 +136,12 @@ class Data {
           var query2 = null;
           if(reg.test(identifier)){
               query2 = {
-              text: 'INSERT INTO users (first_name, last_name, organization, phone) VALUES ($1, $2, $3, $4 ) RETURNING *',
+              text: 'INSERT INTO planter (first_name, last_name, organization, phone) VALUES ($1, $2, $3, $4 ) RETURNING *',
               values: [first_name, last_name, organization, identifier]
               }
           } else {
               query2 = {
-              text: 'INSERT INTO users (first_name, last_name, organization, email) VALUES ($1, $2, $3, $4 ) RETURNING *',
+              text: 'INSERT INTO planter (first_name, last_name, organization, email) VALUES ($1, $2, $3, $4 ) RETURNING *',
               values: [first_name, last_name, organization, identifier]
               }
           }

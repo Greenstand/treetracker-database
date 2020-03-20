@@ -25,11 +25,15 @@ const data = new Data(pool);
 const app = express();
 const port = process.env.NODE_PORT || 3005;
 
+
+/*
 Sentry.init({ dsn: config.sentry_dsn });
 
 app.use(Sentry.Handlers.requestHandler());
+*/
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
+/*
 app.use(Sentry.Handlers.errorHandler());
 
 // Optional fallthrough error handler
@@ -39,6 +43,7 @@ app.use(function onError(err, req, res, next) {
   res.statusCode = 500;
   res.end(res.sentry + '\n');
 });
+*/
 
 
 app.set('view engine','html');
@@ -46,6 +51,7 @@ app.set('view engine','html');
 app.post('/planter', async (req, res) => {
   const user = await data.findOrCreateUser(req.body.planter_identifier, req.body.first_name, req.body.last_name, req.body.organization);
   await data.createPlanterRegistration(user.id, req.deviceId, req.body);
+  console.log("processed planter" + user.id);
   res.status(200).json({});
 });
 
@@ -61,6 +67,7 @@ app.post('/tree', async (req, res) => {
       res.status(200).json({ duplicate });
     } else {
       const tree = await data.createTree( user.id, req.deviceId, req.body);
+      console.log("created tree " + tree.uuid);
       res.status(201).json({ tree });
     }
 });
