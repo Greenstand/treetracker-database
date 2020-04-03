@@ -1,0 +1,1 @@
+pg_dump --table migrations --no-acl  postgresql://doadmin:pkcvzm9pbt5aoflu@treetracker-production-db-cluster-do-user-1067699-0.a.db.ondigitalocean.com:25060/treetracker?sslmode=require  > treetracker.migrations.pgsql
