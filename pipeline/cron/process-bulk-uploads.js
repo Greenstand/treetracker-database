@@ -46,7 +46,7 @@ const pool = new Pool({
     if(bulkData.registrations != null){
 
       for(let planter of bulkData.registrations){
-        console.log(tree);
+        console.log(planter);
 
         var options = {
           method: 'POST',
