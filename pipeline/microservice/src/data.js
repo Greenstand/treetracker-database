@@ -154,7 +154,8 @@ class Data {
   }
 
 
-  async updateDevice(id, body, callback){
+  async upsertDevice(body, callback){
+    let android_id = body['device_identifier']
     let app_version = body['app_version']
     let app_build = body['app_build']
     let manufacturer = body['manufacturer']
@@ -165,6 +166,13 @@ class Data {
     let serial = body['serial']
     let android_release = body['androidRelease']
     let android_sdk = body['androidSdkVersion']
+
+    // insert only if one does not exist
+    const insert = {
+      text: `INSERT INTO devices (android_id) values ($1) ON CONFLICT (android_id) DO NOTHING`,
+      values: [android_id]
+    };
+    await this.pool.query(insert);
 
     const query = {
       text: `UPDATE devices
@@ -178,12 +186,12 @@ class Data {
       serial = ($8),
       android_release = ($9),
       android_sdk = ($10)
-      WHERE id = ($11)`,
-      values: [app_version, app_build, manufacturer, brand, model, hardware, device, serial, android_release, android_sdk, id]
+      WHERE android_id = ($11)
+      RETURNING *`,
+      values: [app_version, app_build, manufacturer, brand, model, hardware, device, serial, android_release, android_sdk, android_id]
     };
-
-    await this.pool.query(query);
-
+    const device = await this.pool.query(query);
+    return device;
   }
 
 }

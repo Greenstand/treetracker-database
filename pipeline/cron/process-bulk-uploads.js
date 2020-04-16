@@ -36,7 +36,6 @@ const pool = new Pool({
           json: true // Automatically stringifies the body to JSON
         };
 
-        //const result = await rp(options);
         const promise = rp(options);
         requests.push(promise);
       
@@ -56,11 +55,29 @@ const pool = new Pool({
           json: true // Automatically stringifies the body to JSON
         };
 
-        //const result = await rp(options);
         const promise = rp(options);
         requests.push(promise);
       
       }
+    }
+
+    if(bulkData.devices != null){
+
+      for(let device of bulkData.devices){
+        console.log(device);
+
+        var options = {
+          method: 'POST',
+          uri: Config.dataInputMicroserviceURI + "device",
+          body: device,
+          json: true // Automatically stringifies the body to JSON
+        };
+
+        const promise = rp(options);
+        requests.push(promise);
+      
+      }
+
     }
 
 
@@ -76,7 +93,6 @@ const pool = new Pool({
     };
     const rvalUpdate = await pool.query(update);
     console.log(`Processed bulk tree upload ${row.id}`);
-
 
   }
 
