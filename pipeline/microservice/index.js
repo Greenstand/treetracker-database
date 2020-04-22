@@ -54,8 +54,8 @@ app.post('/planter', async (req, res) => {
   var body = req.body;
   body.phone = planter.phone;
   body.email = planter.email;
-  await data.createPlanterRegistration(user.id, req.body.device_identifier, body);
-  console.log("processed planter" + user.id);
+  await data.createPlanterRegistration(planter.id, req.body.device_identifier, body);
+  console.log("processed planter" + planter.id);
   res.status(200).json({});
 });
 
