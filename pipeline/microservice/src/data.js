@@ -24,7 +24,7 @@ class Data {
     }
   }
 
-  async createTree(planterId, deviceId, body) {
+  async createTree(planterId, deviceIdentifier, body) {
     let lat = body.lat;
     let lon = body.lon;
     let gpsAccuracy = body.gps_accuracy;
@@ -48,12 +48,12 @@ class Data {
         estimated_geometric_location,
         planter_photo_url,
         planter_identifier,
-        device_id,
+        device_identifier,
         note,
         uuid
       )
       VALUES($1, $2, $3, $4, to_timestamp($5), to_timestamp($5), $6, ST_PointFromText($7, 4326), $8, $9, $10, $11, $12 ) RETURNING *`,
-      values: [planterId, lat, lon, gpsAccuracy, timestamp, imageUrl, geometry, planterPhotoUrl, planterIdentifier, deviceId, note, uuid],
+      values: [planterId, lat, lon, gpsAccuracy, timestamp, imageUrl, geometry, planterPhotoUrl, planterIdentifier, deviceIdentifier, note, uuid],
     }
 
     const rval = await this.pool.query(insertQuery)
