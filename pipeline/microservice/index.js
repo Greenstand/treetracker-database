@@ -51,7 +51,7 @@ app.set('view engine','html');
 
 app.post('/planter', async (req, res) => {
   const user = await data.findOrCreateUser(req.body.planter_identifier, req.body.first_name, req.body.last_name, req.body.organization);
-  await data.createPlanterRegistration(user.id, req.deviceIdentifier, req.body);
+  await data.createPlanterRegistration(user.id, req.device_identifier, req.body);
   console.log("processed planter" + user.id);
   res.status(200).json({});
 });
@@ -67,7 +67,7 @@ app.post('/tree', async (req, res) => {
     if(duplicate !== null){
       res.status(200).json({ duplicate });
     } else {
-      const tree = await data.createTree( user.id, req.body.deviceIdentifier, req.body);
+      const tree = await data.createTree( user.id, req.body.device_identifier, req.body);
       console.log("created tree " + tree.uuid);
       res.status(201).json({ tree });
     }

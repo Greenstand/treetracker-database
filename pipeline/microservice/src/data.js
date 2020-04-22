@@ -112,10 +112,10 @@ class Data {
 
   }
 
-  async createPlanterRegistration(planterId, deviceId, body){
+  async createPlanterRegistration(planterId, deviceIdentifier, body){
     var query = {
-      text: 'INSERT INTO planter_registrations ( planter_id, device_id, first_name, last_name, organization, location_string ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      values: [planterId, deviceId, body.first_name, body.last_name, body.organization, body.location_string]
+      text: 'INSERT INTO planter_registrations ( planter_id, device_identifier, first_name, last_name, organization, location_string ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      values: [planterId, deviceIdentifier, body.first_name, body.last_name, body.organization, body.location_string]
      }
     const rval = await this.pool.query(query);
     return rval.rows[0];
