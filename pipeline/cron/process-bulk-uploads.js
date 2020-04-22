@@ -51,7 +51,7 @@ const pool = new Pool({
         var options = {
           method: 'POST',
           uri: Config.dataInputMicroserviceURI + "planter",
-          body: tree,
+          body: planter,
           json: true // Automatically stringifies the body to JSON
         };
 
@@ -67,7 +67,7 @@ const pool = new Pool({
         console.log(device);
 
         var options = {
-          method: 'POST',
+          method: 'PUT',
           uri: Config.dataInputMicroserviceURI + "device",
           body: device,
           json: true // Automatically stringifies the body to JSON
@@ -97,6 +97,7 @@ const pool = new Pool({
   }
 
   pool.end();
+  process.exit(0);
 
 })().catch(e => {
 
@@ -105,4 +106,5 @@ const pool = new Pool({
   pool.end();
 
   console.log('notify-slack-reports done with catch');
+  process.exit(1);
 })

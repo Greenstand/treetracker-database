@@ -190,8 +190,8 @@ class Data {
       RETURNING *`,
       values: [app_version, app_build, manufacturer, brand, model, hardware, device, serial, android_release, android_sdk, android_id]
     };
-    const device = await this.pool.query(query);
-    return device;
+    const returningDevice = await this.pool.query(query);
+    return returningDevice;
   }
 
 }

@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const Sentry = require('@sentry/node');
 const bearerToken = require('express-bearer-token');
 const bodyParser = require('body-parser');
@@ -78,6 +79,13 @@ app.put('/device', async (req, res) => {
     console.log("upsert device " + device.id);
     res.status(200).json({ tree });
 
+});
+
+
+app.use((err, req, res, next) => {
+  res.status(500);
+  res.json({ error: err.message });
+  next(err);
 });
 
 
