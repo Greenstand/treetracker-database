@@ -191,7 +191,7 @@ class Data {
       values: [app_version, app_build, manufacturer, brand, model, hardware, device, serial, android_release, android_sdk, android_id]
     };
     const returningDevice = await this.pool.query(query);
-    return returningDevice;
+    return returningDevice.rows[0];
   }
 
 }
