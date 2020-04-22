@@ -77,7 +77,7 @@ app.put('/device', async (req, res) => {
 
     const device = await data.upsertDevice(req.body);
     console.log("upsert device " + device.id);
-    res.status(200).json({ tree });
+    res.status(200).json({ device });
 
 });
 
