@@ -50,10 +50,10 @@ app.use(function onError(err, req, res, next) {
 app.set('view engine','html');
 
 app.post('/planter', async (req, res) => {
-  const user = await data.findOrCreateUser(req.body.planter_identifier, req.body.first_name, req.body.last_name, req.body.organization);
+  const planter = await data.findOrCreateUser(req.body.planter_identifier, req.body.first_name, req.body.last_name, req.body.organization);
   var body = req.body;
-  body.phone = user.phone;
-  body.email = user.email;
+  body.phone = planter.phone;
+  body.email = planter.email;
   await data.createPlanterRegistration(user.id, req.body.device_identifier, body);
   console.log("processed planter" + user.id);
   res.status(200).json({});
