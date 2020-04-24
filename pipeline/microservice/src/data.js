@@ -27,15 +27,15 @@ class Data {
   async createTree(planterId, deviceIdentifier, body) {
     let lat = body.lat;
     let lon = body.lon;
-    let gpsAccuracy = body.gps_accuracy;
+    let gpsAccuracy = Math.floor(body.gps_accuracy);
     let timestamp = body.timestamp;
     let imageUrl = body.image_url; // first image
-    let planterPhotoUrl = body.planter_photo_url;
-    let planterIdentifier = body.planter_identifier;
+    let planterPhotoUrl = body.planter_photo_url ? body.planter_photo_url : "";
+    let planterIdentifier = body.planter_identifier ? body.planter_identifier : "";
     let note = body.note ? body.note : "";
     let uuid = body.uuid; // This is required
-    let imagesJson = body.images;
-    let domainSpecificDataJson = body.domain_specific_data;
+    let imagesJson = body.images ? body.images : {};
+    let domainSpecificDataJson = body.domain_specific_data ? body.domain_specific_data : {};
 
     const geometry = 'POINT( ' + lon + ' ' + lat + ')';
     const insertQuery = {
@@ -54,15 +54,16 @@ class Data {
         note,
         uuid,
         images,
-        domain_specific_data,
+        domain_specific_data
       )
       VALUES($1, $2, $3, $4, to_timestamp($5), to_timestamp($5), $6, ST_PointFromText($7, 4326), $8, $9, $10, $11, $12, $13, $14 ) RETURNING *`,
-      values: [planterId, lat, lon, gpsAccuracy, timestamp, imageUrl, geometry, planterPhotoUrl, planterIdentifier, deviceIdentifier, note, uuid, images, domain_specific_data],
+      values: [planterId, lat, lon, gpsAccuracy, timestamp, imageUrl, geometry, planterPhotoUrl, planterIdentifier, deviceIdentifier, note, uuid, JSON.stringify(imagesJson), JSON.stringify(domainSpecificDataJson) ],
     }
 
     const rval = await this.pool.query(insertQuery)
       .catch(err => {
         console.log(`ERROR: FAILED TO CREATE TREE ${err}`)
+        console.log(insertQuery);
         throw(err);
       });
     const tree = rval.rows[0];
