@@ -47,8 +47,8 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  return db.runSql("DROP TYPE platform_type").then(function () {
-    return db.dropTable("audit");
+  return db.dropTable("audit").then(function () {
+    return db.runSql("DROP TYPE platform_type");
   });
 };
 
