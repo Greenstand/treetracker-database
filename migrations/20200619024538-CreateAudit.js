@@ -20,7 +20,7 @@ exports.up = function (db) {
     .then(function () {
       return db.createTable("audit", {
         id: { type: "int", primaryKey: true, autoIncrement: true },
-        operator: {
+        admin_user_id: {
           type: "int",
           notNull: true,
         },
