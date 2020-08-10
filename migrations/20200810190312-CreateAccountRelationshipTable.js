@@ -17,8 +17,8 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.createTable('entity_relationship', {
       id: { type: 'int', primaryKey: true, autoIncrement: true},
-      parent_entity_id: { type: 'int', notNull: true },
-      child_entity_id: { type: 'int', notNull: true },
+      parent_id: { type: 'int', notNull: true },
+      child_id: { type: 'int', notNull: true },
       type: { type: 'string', notNull: true},
       created_at : {
         type: 'timestamp',
