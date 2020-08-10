@@ -20,6 +20,7 @@ exports.up = function(db) {
       parent_id: { type: 'int', notNull: true },
       child_id: { type: 'int', notNull: true },
       type: { type: 'string', notNull: true},
+      role: { type: 'string', notNull: true},
       created_at : {
         type: 'timestamp',
         notNull: true,

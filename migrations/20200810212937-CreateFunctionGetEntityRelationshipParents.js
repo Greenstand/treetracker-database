@@ -20,15 +20,15 @@ exports.up = function(db) {
   int,
   text
 )
-RETURNS TABLE (entity_id int, parent_id int, depth int, relationship_type text)
+RETURNS TABLE (entity_id int, parent_id int, depth int, type text, role text)
 AS $$
 WITH RECURSIVE parents AS (
- SELECT entity.id, entity_relationship.parent_id, -1 as depth, entity_relationship.type
+ SELECT entity.id, entity_relationship.parent_id, -1 as depth, entity_relationship.type, entity_relationship.role
  FROM entity
  LEFT JOIN entity_relationship ON entity_relationship.parent_id = entity.id AND entity_relationship.type = $2
  WHERE entity.id = $1
 UNION
- SELECT next_parent.id, entity_relationship.parent_id, depth - 1, entity_relationship.type
+ SELECT next_parent.id, entity_relationship.parent_id, depth - 1, entity_relationship.type, entity_relationship.role
  FROM entity next_parent
  JOIN entity_relationship ON entity_relationship.parent_id = next_parent.id AND entity_relationship.type = $2
  JOIN parents p ON entity_relationship.child_id = p.id
