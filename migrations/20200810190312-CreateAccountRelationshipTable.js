@@ -19,7 +19,7 @@ exports.up = function(db) {
       id: { type: 'int', primaryKey: true, autoIncrement: true},
       parent_entity_id: { type: 'int', notNull: true },
       child_entity_id: { type: 'int', notNull: true },
-      relationship_type: { type: 'string', notNull: true},
+      type: { type: 'string', notNull: true},
       created_at : {
         type: 'timestamp',
         notNull: true,
