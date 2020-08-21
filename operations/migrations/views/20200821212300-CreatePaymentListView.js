@@ -15,14 +15,14 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.runSql(`CREATE VIEW active_approved_trees AS
-  SELECT *
-  FROM trees
-  WHERE trees.approved = true AND trees.active = true`);
+  return db.runSql(`CREATE VIEW payment_list AS
+    SELECT *
+    FROM trees
+    WHERE trees.approved = true AND trees.active = true AND (trees.device_id = ANY (ARRAY[216, 238, 317, 298, 360, 598]))`);
 };
 
 exports.down = function(db) {
-  return db.runSql(`DROP VIEW active_approved_trees`); 
+  return db.runSql(`DROP VIEW payment_list`);
 };
 
 exports._meta = {

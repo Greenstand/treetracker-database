@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.runSql(`CREATE VIEW operations.greenstand_available_trees
+  return db.runSql(`CREATE VIEW greenstand_available_trees
 AS SELECT trees.*,
 planter.first_name, planter.last_name, planter.image_url as planter_image_url
 FROM trees
@@ -33,7 +33,7 @@ AND trees.id NOT IN (
 };
 
 exports.down = function(db) {
-  return db.runSql('DROP VIEW operations.greenstand_available_trees');
+  return db.runSql('DROP VIEW greenstand_available_trees');
 };
 
 exports._meta = {
