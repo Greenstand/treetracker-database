@@ -1,4 +1,4 @@
-CsREATE TEMPORARY TABLE new_region_data AS (SELECT * FROM import.world_continents_simplified);
+CREATE TEMPORARY TABLE new_region_data AS (SELECT * FROM import.world_continents_simplified);
 ALTER TABLE new_region_data DROP COLUMN geom;
 
 INSERT INTO region_type
