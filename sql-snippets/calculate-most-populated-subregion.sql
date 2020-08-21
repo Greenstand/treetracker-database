@@ -104,6 +104,7 @@ ORDER BY region.id, total DESC
 
 
 
+# this will work, with bounding box
 SELECT DISTINCT ON (region.id)
 region.id region_id,
 contained.region_id most_populated_subregion_id,
@@ -112,19 +113,21 @@ FROM
  (
   SELECT region_id, zoom_level
   FROM active_tree_region
-  WHERE zoom_level = 2
+  WHERE zoom_level = 6
   GROUP BY region_id, zoom_level
  ) populated_region
 JOIN region
 ON region.id = populated_region.region_id
-JOIN LATERAL (
+JOIN (
   SELECT region_id, zoom_level, count(active_tree_region.id) AS total, centroid
   FROM active_tree_region
-  WHERE zoom_level = 4
+  WHERE zoom_level = 8
   GROUP BY region_id, zoom_level, centroid
 ) contained
 ON ST_CONTAINS(region.geom, contained.centroid)
 ORDER BY region.id, total DESC
+
+
 
 
 
