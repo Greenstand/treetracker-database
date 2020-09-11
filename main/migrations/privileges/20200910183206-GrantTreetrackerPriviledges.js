@@ -59,39 +59,7 @@ exports.up = function(db, callback) {
 exports.down = function(db, callback) {
   async.series(
     [
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON admin_role FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON admin_user FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON admin_user_role FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON audit FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON certificates FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON clusters FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON contract FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON devices FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON donors FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON entity FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON entity_manager FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON entity_relationship FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON entity_role FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON note_trees FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON notes FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON organizations FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON payment FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON planter FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON planter_registrations FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON region FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON region_type FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON region_zoom FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON spatial_ref_sys FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON tag FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON token FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON transaction FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON transfer FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON tree_attributes FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON tree_region FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON tree_species FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON tree_tag FROM treetracker'),
-      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON trees FROM treetracker')
-
+      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM treetracker')
     ],
     callback
   );
