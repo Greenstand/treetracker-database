@@ -1,5 +1,7 @@
 'use strict';
 
+var async = require('async');
+
 var dbm;
 var type;
 var seed;
@@ -14,12 +16,24 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  return db.runSql('GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO data_pipeline');
+exports.up = function(db, callback) {
+  async.series(
+    [ 
+      db.runSql.bind(db, 'GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO data_pipeline'),
+      db.runSql.bind(db, 'GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO data_pipeline')
+    ],
+    callback
+  )
 };
 
-exports.down = function(db) {
-  return db.runSql('REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM data_pipeline');
+exports.down = function(db, callback) {
+  async.series(
+    [
+      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM data_pipeline'),
+      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM data_pipeline')
+    ],
+    callback
+  )
 };
 
 exports._meta = {
