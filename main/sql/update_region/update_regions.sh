@@ -4,11 +4,11 @@ rm *.pgsql
 rm *.tar.gz
 
 echo "URL for archived pgsql shapefile export: "
-read SHAPEFILE_URL
+read CLUSTER_REGIONS_SQL_ARCHIVE_URL
 
-wget $SHAPEFILE_URL
-#[[ $SHAPEFILE_URL =~ .*/([A-z_-]+\.tar\.gz) ]]
-[[ $SHAPEFILE_URL =~ .*/(.*) ]]
+wget $CLUSTER_REGIONS_SQL_ARCHIVE_URL
+#[[ $CLUSTER_REGIONS_SQL_ARCHIVE_URL =~ .*/([A-z_-]+\.tar\.gz) ]]
+[[ $CLUSTER_REGIONS_SQL_ARCHIVE_URL =~ .*/(.*) ]]
 echo ${BASH_REMATCH[1]}
 
 FILENAME=${BASH_REMATCH[1]}
