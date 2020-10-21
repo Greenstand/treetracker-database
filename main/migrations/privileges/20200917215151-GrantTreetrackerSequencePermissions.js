@@ -28,7 +28,7 @@ exports.up = function(db, callback) {
 exports.down = function(db, callback) {
   async.series(
     [
-      db.runSql.bind(db, 'REVOKE PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM treetracker')
+      db.runSql.bind(db, 'REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM treetracker')
     ],
     callback
   );
