@@ -33,7 +33,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.runSql(`DROP TRIGGER token_transction_trigger ON payments;  DROP FUNCTION token_transaction_insert`, callback());
+  db.runSql(`DROP TRIGGER token_transction_trigger ON token;  DROP FUNCTION token_transaction_insert`, callback());
 };
 
 exports._meta = {
