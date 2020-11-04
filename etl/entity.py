@@ -23,34 +23,43 @@ table = etl.fromdb(oConnection, 'SELECT * FROM public.entity')
 
 #Also extract from Organization Directory file.
 OrgDirectory = etl.fromcsv('OrganizationDirectory.csv')
-#OrgDirectory = dict(OrgTable)
-
+OrgDictionary = etl.lookup(OrgDirectory, 'name') #Dictionary format
 
 #Transform
-#Filter out rows where first & last name are null or organization name is null
-table = etl.select(table, lambda row: row.name != None and row.name != ""
-and row.first_name != None and row.last_name != None)
-
-#Lowercase type, capitalize first & last name
+#Generic transforms: Lowercase type, capitalize first & last name
 table = etl.convert(table, {
     'type': lambda entityType: entityType.lower(),
     'first_name': lambda fName: fName.capitalize(),
     'last_name': lambda lName: lName.capitalize()
 })
 
+#Seperate into two tables, organizations and planters
+orgTable = etl.select(table, lambda row: row.type == 'o')
+planterTable = etl.select(table, lambda row: row.type == 'p' or row.type == 'c')
+
 #Replace with fake information. 
 fake = Faker(['en_US', 'en_GB'])
 Faker.seed(1234)
 stringArray = string.digits + string.ascii_letters
 
-#Need to extract organization names into a list for randomization. 
-OrgLength = len(OrgDirectory) #Number of rows in Organization Directory.
-OrgNameList = []
-for row in range(1, OrgLength): #Start at 1 since first row is header row.
-    OrgNameList.append(OrgDirectory[row][0])
+#Add row #s to make lookup easier
+orgTable = etl.addrownumbers(orgTable)
+OrgDirectory = etl.addrownumbers(OrgDirectory)
 
-table = etl.convert(table, {
-    'name': lambda name: organization.randomCompany(OrgNameList),
+#Fill in organization values based on organization directory.
+orgTable = etl.convert(orgTable, 'name', lambda name, row: organization.CompanyName(OrgDirectory, row.row), pass_row = True)
+
+orgTable = etl.convert(orgTable, {
+    'first_name': lambda fname: None, #Set to null for name
+    'last_name': lambda lname: None, 
+    'email': lambda email: fake.email(), 
+    'phone': lambda phone: fake.phone_number(), 
+    'password': lambda password: word.secretWord(stringArray, password), 
+    'salt': lambda salt: word.secretWord(stringArray, salt)
+})
+
+planterTable = etl.convert(planterTable, {
+    'name': lambda name: None, #Set organization to null
     'first_name': lambda fname: fake.first_name(), 
     'last_name': lambda lname: fake.last_name(), 
     'email': lambda email: fake.email(), 
@@ -60,18 +69,28 @@ table = etl.convert(table, {
 })
 
 #Determine website string, using organiztion directory and name as parameters. 
-table = etl.convert(table, 'website', lambda web, row: organization.randomWebsite(OrgDirectory, row.name), 
+orgTable = etl.convert(orgTable, 'website', lambda web, row: organization.randomWebsite(OrgDictionary, row.name), 
 pass_row = True)
 
 #Determine image url, using organiztion directory and name as parameters. 
-table = etl.convert(table, 'logo_url', lambda image, row: organization.randomImage(OrgDirectory, row.name), 
+orgTable = etl.convert(orgTable, 'logo_url', lambda image, row: organization.randomImage(OrgDictionary, row.name), 
 pass_row = True)
+
+#Wallet name for organization based on organization name
+orgTable = etl.convert(orgTable, 'wallet', lambda wallet, row: row.name, pass_row = True)
 
 #Combine first name and last name to get wallet name. 
-table = etl.convert(table, 'wallet', lambda wallet, row: word.combineWords(row.first_name, row.last_name), 
+planterTable = etl.convert(planterTable, 'wallet', lambda wallet, row: word.combineWords(row.first_name, row.last_name), 
 pass_row = True)
 
+#Remove row field from orgTable. 
+orgTable = etl.cutout(orgTable, 'row')
+
+#Combine organization and planter tables
+finalTable = etl.cat(orgTable, planterTable)
+
 #Load
+
 #Define database connection paraemters for target database
 TDBNAME = config('TARGET_DBNAME')
 TDBUSER = config('TARGET_DBUSER')
@@ -82,5 +101,5 @@ TDBPORT = config('TARGET_DBPORT')
 tConnection = db.connect(database=TDBNAME, user=TDBUSER, password=TDBPASSWORD, 
 host = TDBHOST, port = TDBPORT)
 
-#Append inserts new rows into database table. 
-etl.appenddb(table, tConnection, 'entity', 'public')
+#Load rows into database table. 
+etl.todb(finalTable, tConnection, 'entity', 'public')

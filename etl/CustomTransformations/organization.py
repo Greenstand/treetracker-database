@@ -4,18 +4,18 @@ import petl as etl
 #Functions related to the Organization Directory
 
 #Return random company from directory
-#Parameter: companyName (type list)
-def randomCompany(companyName):
-    return random.choice(companyName)
+#Parameter: companyName (type CSVView), row
+def CompanyName(companyName, row):
+    return companyName[row][1]
 
 #Return random website from directory
-#Paraemters: table (type CSVView), CompanyName (type string)
+#Parameters: table (type dictionary), CompanyName (type string)
 def randomWebsite(table, CompanyName):
-    companyRow = etl.selecteq(table, 'name', CompanyName) #Returns both header and row
-    return companyRow[1][1] #Get actual row. Website is second value in row.
+    companyRow = table[CompanyName] #Returns list with a tuple
+    return companyRow[0][1] #Get actual row. Website is second value in row.
 
 #Return random image_url from directory
-#Paraemters: table (type CSVView), CompanyName (type string)
+#Paraemters: table (type dictionary), CompanyName (type string)
 def randomImage(table, CompanyName):
-    companyRow = etl.selecteq(table, 'name', CompanyName)
-    return companyRow[1][2] #logo_url is third value in row. 
+    companyRow = table[CompanyName]
+    return companyRow[0][2] #logo_url is third value in row. 
