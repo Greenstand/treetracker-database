@@ -27,12 +27,29 @@ TDBPORT = config('TARGET_DBPORT')
 tConnection = db.connect(database=TDBNAME, user=TDBUSER, password=TDBPASSWORD, 
 host = TDBHOST, port = TDBPORT)
 
+#Create two separate tables, depending on whether foreign key is null or not. 
 table = etl.fromdb(oConnection, """SELECT * FROM public.planter 
 WHERE person_id is not NULL OR organization_id is not NULL""")
+
+tableNull = etl.fromdb(oConnection, """SELECT * FROM public.planter
+WHERE person_id is NULL and organization_id is NULL""")
 
 entityTable = etl.fromdb(tConnection, 'SELECT * FROM public.entity')
 
 #Transform
+
+#Create instance of faker class
+fake = Faker(['en_US', 'en_GB']) #Locales: United States/Great Britain
+Faker.seed(1234)
+
+#Anonymize values in table with null foreign keys. 
+tableNull = etl.convert(tableNull, {
+    'first_name': lambda row: fake.first_name(), 
+    'last_name': lambda row: fake.last_name(), 
+    'email': lambda row: fake.email(), 
+    'organization': lambda row: None, #Set to null since organization_id is null
+    'phone': lambda row: fake.phone_number(), 
+    'image_url': lambda row: fake.image_url()})
 
 #Select fields from entityTable
 entityTable = etl.cut(entityTable, 'id', 'name', 'first_name', 'last_name', 'email', 'phone')
@@ -43,10 +60,6 @@ entityTable = etl.rename(entityTable, {
     'last_name': 'l_name', 
     'email': 'email_address', 
     'phone': 'phone_number'})
-
-#Create instance of faker class
-fake = Faker(['en_US', 'en_GB']) #Locales: United States/Great Britain
-Faker.seed(1234)
 
 #Left join planterTable with entityTable on organization_id
 joinTable = etl.leftjoin(table, entityTable, lkey='organization_id', rkey='id')
@@ -97,9 +110,11 @@ joinTable = etl.cutout(joinTable,'name', 'f_name', 'l_name', 'email_address', 'p
 #Anonymize image_url
 joinTable = etl.convert(joinTable, 'image_url', lambda row: fake.image_url())
 
+#Combine joinTable with previous table (with null foreign keys)
+finalTable = etl.cat(joinTable, tableNull)
+
 #Select unique rows in table based on email criteria
-joinTable = etl.distinct(joinTable, 'email')
-etl.tocsv(joinTable, 'planter.csv')
+finalTable = etl.distinct(finalTable, 'email')
 
 #Load rows into database table. 
-etl.todb(joinTable, tConnection, 'planter', 'public')
+etl.todb(finalTable, tConnection, 'planter', 'public')
