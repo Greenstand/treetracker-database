@@ -27,11 +27,7 @@ OrgDictionary = etl.lookup(OrgDirectory, 'name') #Dictionary format
 
 #Transform
 #Generic transforms: Lowercase type, capitalize first & last name
-table = etl.convert(table, {
-    'type': lambda entityType: entityType.lower(),
-    'first_name': lambda fName: fName.capitalize(),
-    'last_name': lambda lName: lName.capitalize()
-})
+table = etl.convert(table, 'type', lambda entityType: entityType.lower())
 
 #Seperate into two tables, organizations and planters
 orgTable = etl.select(table, lambda row: row.type == 'o')
@@ -58,16 +54,6 @@ orgTable = etl.convert(orgTable, {
     'salt': lambda salt: word.secretWord(stringArray, salt)
 })
 
-planterTable = etl.convert(planterTable, {
-    'name': lambda name: None, #Set organization to null
-    'first_name': lambda fname: fake.first_name(), 
-    'last_name': lambda lname: fake.last_name(), 
-    'email': lambda email: fake.email(), 
-    'phone': lambda phone: fake.phone_number(), 
-    'password': lambda password: word.secretWord(stringArray, password), 
-    'salt': lambda salt: word.secretWord(stringArray, salt)
-})
-
 #Determine website string, using organiztion directory and name as parameters. 
 orgTable = etl.convert(orgTable, 'website', lambda web, row: organization.randomWebsite(OrgDictionary, row.name), 
 pass_row = True)
@@ -78,6 +64,18 @@ pass_row = True)
 
 #Wallet name for organization based on organization name
 orgTable = etl.convert(orgTable, 'wallet', lambda wallet, row: row.name, pass_row = True)
+
+planterTable = etl.convert(planterTable, {
+    'name': lambda name: None, #Set organization to null
+    'first_name': lambda fname: fake.first_name(), 
+    'last_name': lambda lname: fake.last_name(), 
+    'email': lambda email: fake.email(), 
+    'phone': lambda phone: fake.phone_number(), 
+    'password': lambda password: word.secretWord(stringArray, password), 
+    'salt': lambda salt: word.secretWord(stringArray, salt), 
+    'website': lambda web: None, #Null
+    'logo_url': lambda logo: None
+})
 
 #Combine first name and last name to get wallet name. 
 planterTable = etl.convert(planterTable, 'wallet', lambda wallet, row: word.combineWords(row.first_name, row.last_name), 
