@@ -51,7 +51,8 @@ exports.up = function(db, callback) {
       db.runSql.bind(db, 'GRANT SELECT, INSERT, UPDATE ON tree_region TO treetracker'),
       db.runSql.bind(db, 'GRANT SELECT, INSERT, UPDATE ON tree_species TO treetracker'),
       db.runSql.bind(db, 'GRANT SELECT, INSERT, UPDATE ON tree_tag TO treetracker'),
-      db.runSql.bind(db, 'GRANT SELECT, INSERT, UPDATE ON trees TO treetracker')
+      db.runSql.bind(db, 'GRANT SELECT, INSERT, UPDATE ON trees TO treetracker'),
+      db.runSql.bind(db, 'GRANT SELECT ON wallet.token TO treetracker')
     ],
     callback
   );
